@@ -151,7 +151,7 @@ com.minecraft.sync/
       "raw_name": "appleskin-forge-mc1.20.1-2.5.1.jar",
       "res": "https://cdn.modrinth.com/data/EsAfCjCV/versions/XdXDExVF/appleskin-forge-mc1.20.1-2.5.1.jar",
       "subject": "enhance"
-    },]
+    }]
 }
 ```
 工具会按照先必需的模组，再可选的模组，最后是资源包、光影包的顺序进行下载，其中必需的模组会先下载 subject 为 libs 的模组，防止网络出现问题时先下载功能性模组导致缺失前置的问题。
