@@ -1,0 +1,9 @@
+Main.class
+com/minecraft/sync/JsonParser.class
+com/minecraft/sync/MinecraftResSyncGUI$1.class
+com/minecraft/sync/ModInfo.class
+com/minecraft/sync/HttpClient.class
+com/minecraft/sync/ModListResponse.class
+com/minecraft/sync/MinecraftResSyncGUI$2.class
+com/minecraft/sync/ArgumentParser.class
+com/minecraft/sync/MinecraftResSyncGUI.class
