@@ -1,133 +1,157 @@
-# Minecraft Resource Sync Tool
+# 🎮 Minecraft Resource Sync Tool
 
-一个Java工具程序，用于在Minecraft主程序启动前同步mod资源列表。
+[![Java](https://img.shields.io/badge/Java-11+-orange.svg)](https://openjdk.org/)
+[![Maven](https://img.shields.io/badge/Maven-3.8+-blue.svg)](https://maven.apache.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## 功能特性
+一个现代化的Minecraft资源同步工具，专为模组整合包管理而设计。支持从远程API自动获取和管理mod、资源包、光影包和配置文件，提供完整的图形化界面和命令行操作。
 
-- ✅ 通过命令行参数接收远程API端点URL
-- ✅ 读取本地 `/Users/galentwww/IdeaProjects/minecraftResSync/modlist.json` 中的资源列表数据
-- ✅ 在控制台显示获取到的资源列表
-- ✅ 按分类统计mod数量
-- ✅ 显示必需mod的统计信息
+## 🌟 项目特色
 
-## 使用方法
+### 🔧 技术架构
+- **纯Java实现**：基于Java 11+，跨平台兼容
+- **现代化UI**：采用FlatLaf主题，提供优雅的深色界面
+- **模块化设计**：清晰的代码分层和职责分离
+- **RESTful API集成**：支持远程数据源同步
+- **智能缓存**：本地备份机制，确保离线可用性
 
-### 运行程序
+## 🚀 快速开始
 
+### 🎯 安装方式
+
+#### 方式1：直接使用发行版
 ```bash
-java -jar minecraftResSync.jar <api-endpoint-url>
+# 下载最新版本
+wget https://github.com/galentwww/minecraftResSync/releases/latest/download/minecraftResSync.jar
+
+# 直接运行
+java -jar minecraftResSync.jar
 ```
 
-### 示例
-
+#### 方式2：源码编译
 ```bash
-java -jar minecraftResSync.jar https://api.galentwww.cn/items/modlist
+# 克隆项目
+git clone https://github.com/your-repo/minecraftResSync.git
+cd minecraftResSync
+
+# 一键构建
+chmod +x build.sh
+./build.sh
+
+# 运行程序
+java -jar target/minecraftResSync.jar
 ```
 
-### 输出示例
-
-```
-=== Minecraft Resource Sync Tool ===
-Starting resource synchronization...
-
-API Endpoint: https://api.galentwww.cn/items/modlist
-
---- Reading local modlist.json ---
-Found 69 mods:
-================================================================================
-  1. Mod: AppleSkin (ID: 71) - enhance [Required] - appleskin-forge-mc1.20.1-2.5.1.jar
-  2. Mod: BetterF3 (ID: 72) - enhance [Required] - BetterF3-7.0.2-Forge-1.20.1.jar
-  ...
-================================================================================
-
---- Summary by Subject ---
-enhance        : 24 mods
-gamemode       : 16 mods
-beautify       : 13 mods
-libs           : 11 mods
-others         : 4 mods
-
-Required mods: 63/69
-
---- Remote API fetching (TODO) ---
-Remote API integration will be implemented in the next phase
-
-=== Resource sync completed ===
-```
-
-## 项目结构
+## 🏗️ 项目结构
 
 ```
 minecraftResSync/
-├── src/
-│   ├── Main.java                      # 主程序入口
-│   └── com/minecraft/sync/
-│       ├── ModInfo.java              # Mod信息数据模型
-│       ├── ModListResponse.java      # JSON响应数据模型
-│       ├── JsonParser.java          # JSON解析工具
-│       ├── HttpClient.java          # HTTP客户端工具
-│       └── ArgumentParser.java      # 命令行参数解析
-├── lib/
-│   └── gson-2.10.1.jar              # GSON依赖库
-├── target/
-│   ├── classes/                     # 编译后的类文件
-│   └── minecraftResSync.jar         # 可执行JAR文件
-├── modlist.json                     # 本地mod列表数据
-├── pom.xml                          # Maven配置文件
-└── build.sh                         # 构建脚本
+├── 📁 src/main/java/                 # 源代码目录
+│   ├── Main.java                     # 程序入口
+│   └── com/minecraft/sync/           # 核心模块
+│       ├── MinecraftResSyncGUI.java  # 图形界面
+│       ├── JsonParser.java          # JSON解析
+│       ├── HttpClient.java          # 网络请求
+│       ├── FileDownloader.java      # 文件下载
+│       ├── UpdateChecker.java       # 更新检查
+│       ├── ArgumentParser.java      # 参数解析
+│       ├── ModInfo.java             # 数据模型
+│       └── ModListResponse.java     # 响应封装
+├── 📁 release/                       # 发行文件
+│   ├── minecraftResSync.jar         # 可执行程序
+│   ├── README.md                    # 使用说明
+│   ├── start.bat                    # Windows启动脚本
+│   └── start.sh                     # Linux/macOS启动脚本
+├── 📁 mods/                          # 模组存储目录
+├── 📁 resourcepacks/                # 资源包存储目录
+├── 📁 shaderpacks/                  # 光影包存储目录
+├── 📁 config/                       # 配置文件目录
+├── pom.xml                          # Maven配置
+├── build.sh                         # 构建脚本
+└── modlist.json                     # 本地模组列表
 ```
 
-## 开发阶段
+## 🎮 使用指南
 
-### 已完成 ✅
-- 项目初始化
-- 基本框架搭建
-- 参数解析功能
-- JSON解析功能
-- 控制台输出功能
-- 本地文件读取
+### 📋 图形界面操作
 
-### 待实现 🚧
-- 远程API数据获取
-- 文件下载功能
-- 版本检查与更新
-- 错误处理和重试机制
+1. **启动程序**：双击或命令行启动
+2. **获取数据**：自动从API获取最新模组列表
+3. **浏览模组**：按分类查看可用模组
+4. **选择下载**：勾选需要的模组
+5. **执行同步**：一键下载并安装
+6. **验证完成**：Hash验证确保完整性
 
-## 构建说明
-
-### 手动构建
-
-1. 下载GSON库：
-   ```bash
-   curl -L -o lib/gson-2.10.1.jar https://repo1.maven.org/maven2/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar
-   ```
-
-2. 编译Java文件：
-   ```bash
-   find src -name "*.java" | xargs javac -cp "lib/gson-2.10.1.jar" -d target/classes
-   ```
-
-3. 创建JAR文件：
-   ```bash
-   cd target && jar cfm minecraftResSync.jar MANIFEST.MF -C classes . .
-   ```
-
-### 使用Maven构建（需要安装Maven）
+### ⚙️ 命令行操作
 
 ```bash
-mvn clean compile package
+# 基础使用
+java -jar minecraftResSync.jar --cli https://api.example.com/modlist
+
+# 带参数使用
+java -jar minecraftResSync.jar https://api.example.com/modlist
+
+# 查看帮助
+java -jar minecraftResSync.jar --help
 ```
 
-## 技术栈
+#### 日志调试
+```bash
+# 启用详细日志
+java -jar minecraftResSync.jar --debug
 
-- Java 11+
-- Gson 2.10.1 (JSON处理)
-- 标准Java HTTP客户端
-- 命令行参数解析
+# 查看版本信息
+java -jar minecraftResSync.jar --version
+```
 
-## 注意事项
+## 🛠️ 开发指南
 
-- 程序需要在Minecraft主程序启动前运行
-- 确保modlist.json文件路径正确
-- 远程API端点需要返回符合格式的JSON数据
-- 程序目前仅实现基础功能，文件下载功能将在下一阶段实现
+### 🏗️ 环境搭建
+
+```bash
+# 1. 克隆项目
+git clone https://github.com/your-repo/minecraftResSync.git
+
+# 2. 安装依赖
+mvn clean install
+
+# 3. 运行测试
+mvn test
+
+# 4. 构建发行版
+mvn package
+```
+
+### 📝 代码规范
+
+#### 包结构
+```
+com.minecraft.sync/
+├── model/           # 数据模型
+├── network/         # 网络通信
+├── ui/              # 用户界面
+├── util/            # 工具类
+└── exception/       # 异常处理
+```
+## 如何托管自己的 MOD？
+
+构建一个远程 Modlist，我使用了 Directus，你也可以使用你习惯的方式，或者直接手动编写
+
+```json
+{
+  "data": [
+    {
+      "catelog": "mods",
+      "description": null,
+      "friendly_name": "AppleSkin",
+      "hash": "dae63cea9c951dda542a4005ceef3953",
+      "id": 71,
+      "is_require": true,
+      "raw_name": "appleskin-forge-mc1.20.1-2.5.1.jar",
+      "res": "https://cdn.modrinth.com/data/EsAfCjCV/versions/XdXDExVF/appleskin-forge-mc1.20.1-2.5.1.jar",
+      "subject": "enhance"
+    },]
+}
+```
+工具会按照先必需的模组，再可选的模组，最后是资源包、光影包的顺序进行下载，其中必需的模组会先下载 subject 为 libs 的模组，防止网络出现问题时先下载功能性模组导致缺失前置的问题。

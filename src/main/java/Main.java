@@ -1,32 +1,79 @@
 import com.minecraft.sync.*;
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Main {
-    private static final String LOCAL_MODLIST_PATH = "/Users/galentwww/IdeaProjects/minecraftResSync/modlist.json";
+    // Platform-dependent fallback path for modlist.json
+    private static String getLocalModlistPath() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            // Windows fallback - current directory 
+            String currentDir = System.getProperty("user.dir");
+            return currentDir + "\\modlist.json";
+        } else {
+            // macOS/Linux fallback
+            return "/Users/galentwww/IdeaProjects/minecraftResSync/modlist.json";
+        }
+    }
 
     public static void main(String[] args) {
+        // Check for updates before launching any mode
+        UpdateChecker.checkAndUpdate();
+        
         // Check if should launch GUI (no arguments or --gui flag)
         if (args.length == 0 || (args.length == 1 && "--gui".equals(args[0]))) {
-            // Launch GUI
+            // Launch GUI without auto-fetch
             javax.swing.SwingUtilities.invokeLater(() -> {
                 new MinecraftResSyncGUI().setVisible(true);
             });
             return;
         }
         
+        // Check if it's a GUI launch with API URL parameter
+        if (args.length == 1 && !args[0].startsWith("-")) {
+            // Could be either GUI with URL or CLI mode
+            String apiUrl = args[0];
+            
+            // Launch GUI with auto-fetch
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                new MinecraftResSyncGUI(apiUrl).setVisible(true);
+            });
+            return;
+        }
+        
+        // Check for explicit CLI mode
+        if (args.length == 2 && "--cli".equals(args[0])) {
+            runCliMode(args[1]);
+            return;
+        }
+        
+        // Default: treat single argument as CLI mode for backward compatibility
+        if (args.length == 1) {
+            runCliMode(args[0]);
+            return;
+        }
+        
+        // Invalid arguments
+        System.err.println("Usage: java -jar minecraftResSync.jar [options] [api-endpoint-url]");
+        System.err.println("Options:");
+        System.err.println("  (no args)          Launch GUI");
+        System.err.println("  --gui              Launch GUI");
+        System.err.println("  --cli <url>        Run in CLI mode");
+        System.err.println("  <url>              Launch GUI with auto-fetch");
+        System.exit(1);
+    }
+    
+    private static void runCliMode(String apiUrl) {
         // Continue with CLI mode
         System.out.println("=== Minecraft Resource Sync Tool ===");
         System.out.println("Starting resource synchronization...\n");
 
         // Parse command line arguments
-        ArgumentParser parser = new ArgumentParser(args);
+        ArgumentParser parser = new ArgumentParser(new String[]{apiUrl});
         if (!parser.isValid()) {
             System.err.println("Error: " + parser.getErrorMessage());
-            System.err.println("Usage: java -jar minecraftResSync.jar [--gui | <api-endpoint-url>]");
-            System.err.println("  --gui              Launch graphical interface");
-            System.err.println("  <api-endpoint-url> Run in command line mode");
             System.exit(1);
         }
 
@@ -49,7 +96,7 @@ public class Main {
                 
                 // Fallback to local file
                 System.out.println("\n--- Fallback to local modlist.json ---");
-                ModListResponse localResponse = JsonParser.parseModListFromFile(LOCAL_MODLIST_PATH);
+                ModListResponse localResponse = JsonParser.parseModListFromFile(getLocalModlistPath());
                 
                 if (localResponse != null && localResponse.getData() != null) {
                     System.out.println("Using local modlist.json as fallback");
